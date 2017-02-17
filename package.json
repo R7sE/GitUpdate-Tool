@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "start": "node src/app",
+    "server": "node src/run"
+  },
+  "dependencies": {
+    "lodash": "4.17.4",
+    "fs-extra": "2.0.0",
+    "colors": "1.1.2",
+    "express": "4.14.0",
+    "iconv-lite": "0.4.13",
+    "gulp-line-ending-corrector": "1.0.1",
+    "jszip": "3.1.3"
+  }
+}
