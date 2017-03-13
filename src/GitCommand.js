@@ -68,7 +68,8 @@ class GitCommand {
 
     }
 
-    hash (name, callback) {
+    hash (_name, callback) {
+        let name = _name || this.branchName;
         return this.execResult(`git rev-parse ${name}`, callback);
     }
 
@@ -78,7 +79,7 @@ class GitCommand {
             if (error) {
                 console.info(colors.red(`FAIL : ${error}`));
             } else {
-                callback(output || stdout || 'merge finish');
+                callback && callback(output || stdout || 'merge finish');
             }
         } catch (err) {
             console.info(err.message);
@@ -96,35 +97,54 @@ class GitCommand {
         return this.exec(`git pull ${name}`, callback);
     }
 
-    listSHA () {
-        return this.execResult(`git log --pretty=oneline`);
+    listSHA (_num) {
+        let num = _num ? `-${_num}` : '';
+        return this.execResult(`git log --pretty=oneline --merges ${num}`);
     }
 
     diff (a, b) {
         return this.execResult(`git diff --name-status ${a} ${b}`);
     }
 
-    exportDiff({baseSHA, newSHA, outpath, dirname, exceStatus = null}) {
+    reset (name, _hard = true) {
+        let hard = _hard ? '--hard' : '';
+        this.exec(`git reset ${hard} ${name}`)
+
+
+
+    }
+
+    exportDiff({baseSHA, newSHA, outpath, dirname, exceStatus = null, exceFile = null}) {
         this.checkout(newSHA, () => {
-            let hasExce = Array.isArray(exceStatus);
+            let hasExceStatus = Array.isArray(exceStatus);
+            let hasExceFile = Array.isArray(exceFile);
+            let exceFileReg = (exceFile || []).map(reg => new RegExp(reg));
             let files = this.diff(baseSHA, newSHA).split('\n')
                 .filter(s => s)
                 .map(s => ({
                     status: s.substr(0, 1),
                     path: s.substr(1).trim(),
                 }))
-                .filter(o => (! hasExce) || (exceStatus.indexOf(o.status) >= 0))
-                .map(o => `"${o.path}"`)
-                .join(' ');
+                .filter(o => {
+                    return ((! hasExceStatus) || (exceStatus.indexOf(o.status) < 0)) && (
+                        (! hasExceFile) || (! exceFileReg.some(reg => reg.test(o.path)))
+                    );
+                })
+                .map(o => `"${o.path}"`);
+                // .join(' ');
+
+            if (files.length === 0) {
+                return console.log(colors.green(`${dirname} > 檔案無差異`));
+            }
             let out = node.path.resolve(outpath, dirname || this.branchName());
             let outzip = `${out}.zip`;
-            let result = this.exec(`git archive --format zip -o "${outzip}" ${newSHA} ${files}`);
+            let result = this.exec(`git archive --format zip -o "${outzip}" ${newSHA} ${files.join(' ')}`);
 
             unzip(outzip, out)
                 .then(() => {
                     node.fs.unlinkSync(outzip);
                 });
-            console.info(`git archive --format zip -o "${outzip}" ${newSHA} ${files}`);
+            // console.info(`git archive --format zip -o "${outzip}" ${newSHA} ${files}`);
         });
     }
     test (sha) {

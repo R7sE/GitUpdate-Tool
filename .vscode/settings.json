@@ -3,7 +3,6 @@
 
     "typescript.check.tscVersion": false,
 	"workbench.editor.enablePreviewFromQuickOpen": false,
-	"editor.wrappingColumn": -1,
 	"editor.fontSize": 13,
 	// Configure glob patterns for excluding files and folders.
 	"files.exclude": {
