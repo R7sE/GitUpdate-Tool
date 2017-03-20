@@ -4,7 +4,6 @@ const node = {
     path: require('path'),
     fs: require('fs'),
 };
-let unzip = require('../src/UnZip');
 
 class GitCommand {
     constructor (cwd) {
@@ -136,15 +135,20 @@ class GitCommand {
             if (files.length === 0) {
                 return console.log(colors.green(`${dirname} > 檔案無差異`));
             }
-            let out = node.path.resolve(outpath, dirname || this.branchName());
-            let outzip = `${out}.zip`;
-            let result = this.exec(`git archive --format zip -o "${outzip}" ${newSHA} ${files.join(' ')}`);
 
-            unzip(outzip, out)
-                .then(() => {
-                    node.fs.unlinkSync(outzip);
-                });
-            // console.info(`git archive --format zip -o "${outzip}" ${newSHA} ${files}`);
+            let dirName = dirname || this.branchName();
+            let outDir = node.path.resolve(outpath, dirName);
+            let outZipFile = node.path.resolve(outDir, dirName) + '.zip';
+            this.exec(`mkdir ${outDir}`);
+
+            let result = this.exec(`git archive --format zip -o "${outZipFile}" ${newSHA} ${files.join(' ')}`);
+
+            /* 原先使用 jszip 做 unzip 的時後 binary 檔案會錯誤, 現在改用 7z 來處理,
+             * 安裝 http://www.developershome.com/7-zip
+             */
+            let cmd = `"C:/Program Files/7-Zip/7z.exe" x "${outZipFile}"`;
+            node.execSync(cmd, {cwd: outDir});
+            node.fs.unlinkSync(outZipFile);
         });
     }
     test (sha) {
