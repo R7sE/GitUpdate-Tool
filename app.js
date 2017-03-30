@@ -1,4 +1,4 @@
-const GitCommand = require('../src/GitCommand');
+const GitCommand = require('./src/GitCommand');
 // let cmd = new GitCommand('D:/work/GitHub/LatticeApp');
 
 // let cmd = new GitCommand('D:/work/GitHub/javaserver44');
@@ -8,8 +8,7 @@ let cmd = new GitCommand('D:/work/GitHub/sg44_w');
 
 /* sg44_c */
 ([
-    // 27, 29, 6, 42, 26, 41, 43, 1, 32
-    46, 0, 21, 11, 9, 2
+    11, 46, 21, 0, 9, 2
 ])
 .forEach(sg => {
     cmd.checkout(`sg${sg}`)
