@@ -1,22 +1,24 @@
 const GitCommand = require('./src/GitCommand');
+const Console = require('./src/console');
 // let cmd = new GitCommand('D:/work/GitHub/LatticeApp');
 
 // let cmd = new GitCommand('D:/work/GitHub/javaserver44');
+// let cmd = new GitCommand('D:/work/GitHub/sg44_w');
 // let cmd = new GitCommand('D:/work/GitHub/sg44_c');
-let cmd = new GitCommand('D:/work/GitHub/sg44_w');
+let cmd = new GitCommand('D:/work/GitHub/sg44_m');
 
 
-/* sg44_c */
 ([
-    11, 46, 21, 0, 9, 2
+    46
 ])
 .forEach(sg => {
+    Console.info('開始 sg46 合併');
     cmd.checkout(`sg${sg}`)
-        .pull()
+        // .pull()
         // .push()
         // .reset(`origin/sg${sg}`)
         // .merge('master-自訂規則改成開放柱碰、連柱碰')
-        // .merge('master')
+        .merge('master')
         // .merge('issue-36')
         // .merge('master-star234規則-2版');
         // .merge('master-自訂義234星規則2版');
@@ -24,8 +26,12 @@ let cmd = new GitCommand('D:/work/GitHub/sg44_w');
         // .merge('master-自訂義234星規則-連柱碰only');
         // .merge('master-自訂義234星規則-2版(柱碰and連柱碰)');
         ;
+    cmd.unmergeAddeds().forEach(fname => {
+        Console.warning(`衝突檔案: ${fname}`);
+        cmd.added(fname);
+    });
+
     // exportDiff(sg);
-    // cmd.checkout('sg6');
 });
 
 // exportDiff('sg21');
@@ -46,9 +52,9 @@ function exportDiff (sg) {
         newSHA,
         exceStatus: ['D'],
         exceFile: ['^conf', '^.git', '^\.conf', 'config\.php'],
-        outpath: 'D:/work/UpdateQueue/20170329-1000',
+        outpath: 'D:/work/UpdateQueue/20170503-1530',
         // dirname: `javaserver${sg}`,
-        dirname: `sg${sg}_c`,
+        dirname: `sg${sg}_w`,
     });
 
 }

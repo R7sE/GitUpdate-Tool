@@ -44,7 +44,7 @@ class GitCommand {
     checkout (name, callback) {
         // return this.exec(`git checkout -b ${name}`, callback);
         try {
-            let {output, error} = this.execResult(`git checkout ${name}`);
+            let {output, error} = this.execResult(`git checkout -q ${name}`);
             if (error) {
                 console.info(colors.red(error));
             } else {
@@ -70,6 +70,10 @@ class GitCommand {
     hash (_name, callback) {
         let name = _name || this.branchName;
         return this.execResult(`git rev-parse ${name}`, callback);
+    }
+
+    added (fname) {
+        return this.exec(`git add ${fname}`);
     }
 
     merge (name, callback) {
@@ -103,6 +107,16 @@ class GitCommand {
 
     diff (a, b) {
         return this.execResult(`git diff --name-status ${a} ${b}`);
+    }
+
+    unmergeAddeds() {
+        let res = this.execResult('git status');
+        return (res || '').split('\n').filter(_str => {
+            let str = _str.trim();
+            return str.indexOf('added') === 0;
+        }).map(_str => {
+            return _str.split(':')[1].trim();
+        });
     }
 
     reset (name, _hard = true) {
