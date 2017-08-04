@@ -72,6 +72,10 @@ class GitCommand {
         return this.execResult(`git rev-parse ${name}`, callback);
     }
 
+    chooseThries(fname) {
+        return this.exec(`git checkout --theirs ${fname}`);
+    }
+
     added (fname) {
         return this.exec(`git add ${fname}`);
     }
@@ -117,6 +121,21 @@ class GitCommand {
         }).map(_str => {
             return _str.split(':')[1].trim();
         });
+    }
+
+    unmergeModifys() {
+        let res = this.execResult('git status');
+        return (res || '').split('\n').filter(_str => {
+            let str = _str.trim();
+            return str.indexOf('both modified') === 0;
+        }).map(_str => {
+            return _str.split(':')[1].trim();
+        });
+
+    }
+
+    commit (message) {
+        return this.exec(`git commit -a -m "${message}"`);
     }
 
     reset (name, _hard = true) {

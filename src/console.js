@@ -1,11 +1,12 @@
 const colors = require('colors/safe');
+
 class Console {
 
     constructor () {
         this.cache = {
             color: 'white',
-            debug: false,
-        }
+            debug: true,
+        };
     }
 
     get debug() {
@@ -24,6 +25,7 @@ class Console {
         if (! this.debug) {
             return;
         }
+
         color = color || this.cache.color || 'white';
         console.info(colors[color](message));
     }
@@ -47,4 +49,4 @@ class Console {
 
 
 
-module.exports = new Console;
+module.exports = new Console();
