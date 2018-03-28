@@ -1,78 +1,142 @@
 const GitCommand = require('./src/GitCommand');
 const Console = require('./src/console');
-// let cmd = new GitCommand('D:/work/GitHub/LatticeApp');
-
-// let cmd = new GitCommand('D:/work/GitHub/javaserver44');
-let cmd = new GitCommand('D:/work/GitHub/sg44_c');
-// let cmd = new GitCommand('D:/work/GitHub/sg44_w');
-// let cmd = new GitCommand('D:/work/GitHub/sg44_a');
-
-([
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 21, 81, 82,
-    11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 24, 25, 26, 27, 28, 29, 30, 32, 34, 36, 37, 39, 40, 41, 42, 43, 45, 46, 51
-
-])
-.forEach(sg => {
-    Console.info(`開始 sg${sg} 流程`);
-    cmd.checkout(`sg${sg}`)
-        // .pull()
-        .push()
-        // .reset(`origin/sg${sg}`)
-        // .merge('master-自訂規則改成開放柱碰、連柱碰')
-        // .merge('master-new-service-no-outbet')
-        // .merge('master-new-service')
-        // .merge('master')
-        // .merge('newsky23_six')
-        // .merge('blockSky')
-        ;
-    return;
-    // return;
-    // let hasMerge = false;
-    // cmd.unmergeAddeds().forEach(fname => {
-    //     cmd.added(fname);
-    //     Console.warning(`衝突檔案: ${fname}`);
-    //     hasMerge = true;
-    // });
-
-    // cmd.unmergeModifys().forEach(fname => {
-    //     cmd.chooseThries(fname).added(fname);
-    //     Console.warning(`衝突檔案: ${fname}`);
-    //     hasMerge = true;
-    // });
-
-    // if (hasMerge) {
-    //     Console.info(`Commit sg${sg}`);
-    //     cmd.commit('auto merge');
-    // }
-    Console.success('合併完成');
-    Console.success('==============================');
-    exportDiff(sg);
+const readline = require('readline');
+const branchC = require('./BranchSG-C');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
 });
+const TYPES = {
+    a: 'D:/work/GitHub/sg44_a',
+    m: 'D:/work/GitHub/sg44_m',
+    c: 'D:/work/GitHub/sg44_c',
+    w: 'D:/work/GitHub/sg44_w',
+    javaserver: 'D:/work/GitHub/javaserver44'
+};
 
-// exportDiff('sg21');
+class App {
 
-function exportDiff (sg) {
-    // cmd.checkout(sg);
-    // let baseSHA = cmd.hash('origin/' + sg).trim();
-    // let newSHA = cmd.hash(sg).trim();
-    // let list = cmd.listSHA(8).split('\n').map(s => s.split(' ')[0]);
-    // let [baseSHA, , , , ,newSHA] = list;
-    let baseSHA = cmd.hash(`origin/sg${sg}`).trim();
-    let newSHA = cmd.hash().trim();
+    constructor (type, branchTree) {
 
-    // let folderName =
-    // console.info(`>> ${baseSHA} , ${newSHA}`);
-    cmd.exportDiff({
-        baseSHA,
-        newSHA,
-        exceStatus: ['D'],
-        exceFile: ['^conf', '^.git', '^\.conf', 'config\.php'],
-        outpath: 'D:/work/UpdateQueue/2017107-1020',
-        // dirname: `javaserver${sg}`,
-        dirname: `sg${sg}_c`,
-        // dirname: `sg${sg}_w`,
-    });
+        if (!(type in TYPES)) {
+            throw new Error(`type unknown : ${type}`);
+        }
+        this.branchTree = branchTree;
+        this.SGType = type;
+        this.now = new Date();
 
+        this.cmd = new GitCommand(TYPES[type]);
+    }
+
+    merge (name) {
+
+        const btree = this.branchTree;
+        const cmd = this.cmd;
+
+        const branch = btree.get(name);
+        Object.keys(branch).forEach(child => {
+            Console.info(`merge ${child} & ${name}`);
+            cmd.checkout(child).merge(name);
+            const match = child.match(/^sg(\d+)$/);
+            if (match) {
+                const sg = match[1];
+                this.exportDiff(sg);
+            }
+            this.merge(child);
+        });
+
+    }
+
+    pull (name) {
+        const btree = this.branchTree;
+        const cmd = this.cmd;
+
+        const branch = btree.get(name);
+        Object.keys(branch).forEach(child => {
+            Console.info(`pull origin/${child}`);
+            cmd.checkout(child).pull();
+            this.pull(child);
+        });
+
+    }
+
+    push (name) {
+        const btree = this.branchTree;
+        const cmd = this.cmd;
+
+        const branch = btree.get(name);
+        cmd.checkout(name).push();
+        Object.keys(branch).forEach(child => {
+            Console.info(`push origin/${child}`);
+            cmd.checkout(child).push();
+            this.push(child);
+        });
+
+    }
+
+    reset (name) {
+        const btree = this.branchTree;
+        const cmd = this.cmd;
+
+        const branch = btree.get(name);
+        Object.keys(branch).forEach(child => {
+            Console.info(`重設 ${child} 至 origin/${child}`);
+            cmd.checkout(child).reset(`origin/${child}`);
+            this.reset(child);
+        });
+
+    }
+
+    exportDiff (sg) {
+        // cmd.checkout(sg);
+        // let baseSHA = cmd.hash('origin/' + sg).trim();
+        // let newSHA = cmd.hash(sg).trim();
+        // let list = cmd.listSHA(8).split('\n').map(s => s.split(' ')[0]);
+        // let [baseSHA, , , , ,newSHA] = list;
+        let baseSHA = this.cmd.hash(`origin/sg${sg}`).trim();
+        let newSHA = this.cmd.hash().trim();
+
+        // let folderName =
+        // console.info(`>> ${baseSHA} , ${newSHA}`);
+        let dirname = ({
+            a: `sg${sg}_a`,
+            m: `sg${sg}_m`,
+            c: `sg${sg}_c`,
+            w: `sg${sg}_w`,
+            javaserver: `javaserver${sg}`,
+        })[this.SGType];
+
+        let step = 30;
+
+        let date = this.now;
+        let YMD = ([
+            date.getFullYear(),
+            `0${(date.getMonth() + 1)}`.substr(-2),
+            `0${date.getDate()}`.substr(-2),
+        ]).join('');
+        let minute = Math.floor(date.getMinutes() / step) * step;
+        let HM = ([
+            `0${date.getHours()}`.substr(-2),
+            `0${minute}`.substr(-2),
+        ]).join('');
+        this.cmd.exportDiff({
+            baseSHA,
+            newSHA,
+            exceStatus: ['D'],
+            exceFile: ['^conf', '^.git', '^\.conf', 'config\.php'],
+            outpath: `D:/work/UpdateQueue/${YMD}-${HM}`,
+            dirname,
+        });
+
+    }
 }
 
+rl.question(`key in sg site : ${Object.keys(TYPES).join(', ')}\n`, input => {
 
+    const app = new App(input, branchC);
+    // app.pull('Cross_day');
+    app.push('Cross_day');
+    // app.merge('Cross_day');
+    // app.reset('Cross_day');
+    rl.close();
+});
