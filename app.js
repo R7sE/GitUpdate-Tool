@@ -2,6 +2,7 @@ const GitCommand = require('./src/GitCommand');
 const Console = require('./src/console');
 const readline = require('readline');
 const branchC = require('./BranchSG-C');
+// const branchC = require('./TempTree');
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -13,6 +14,13 @@ const TYPES = {
     w: 'D:/work/GitHub/sg44_w',
     javaserver: 'D:/work/GitHub/javaserver44'
 };
+
+const ChooseThriesMergeFiles = [
+    'control/outbet/star234.php',
+    'tpl/bet_list.php',
+];
+
+
 
 class App {
 
@@ -34,17 +42,55 @@ class App {
         const cmd = this.cmd;
 
         const branch = btree.get(name);
-        Object.keys(branch).forEach(child => {
-            Console.info(`merge ${child} & ${name}`);
-            cmd.checkout(child).merge(name);
-            const match = child.match(/^sg(\d+)$/);
-            if (match) {
-                const sg = match[1];
-                this.exportDiff(sg);
-            }
-            this.merge(child);
-        });
+        let promise = Promise.resolve();
 
+
+        Object.keys(branch).forEach(child => {
+            promise = promise.then(() => {
+                return new Promise((resolve, reject) => {
+
+                    Console.info(`merge ${child} & ${name}`);
+                    cmd.checkout(child).merge(name);
+
+                    /* 衝突檔案 */
+                    const unmergeModifys = cmd.unmergeModifys();
+                    const unmergePromise = new Promise((umResolve, umReject) => {
+                        if (unmergeModifys.length) {
+                            confirm(unmergeModifys, name).then(() => {
+                                const unmergeFiles = unmergeModifys.filter(fname => {
+                                    if (ChooseThriesMergeFiles.indexOf(fname) >= 0) {
+                                        cmd.chooseThries(fname).added(fname);
+                                        return false;
+                                    }
+                                    return true;
+                                });
+
+                                if (unmergeFiles.length) {
+                                    umReject();
+                                    throw new Error('未處理的衝突檔案 : ' + unmergeFiles.join(', '));
+                                } else {
+                                    Console.info(`Commit ${child}`);
+                                    cmd.commit('auto merge');
+                                    umResolve();
+                                }
+                            });
+                        } else {
+                            umResolve();
+                        }
+                    });
+
+                    unmergePromise.then(() => {
+                        const match = child.match(/^sg(\d+)$/);
+                        if (match) {
+                            const sg = match[1];
+                            this.exportDiff(sg);
+                        }
+                        this.merge(child).then(resolve);
+                    }, reject);
+                });
+            });
+        });
+        return promise;
     }
 
     pull (name) {
@@ -65,7 +111,7 @@ class App {
         const cmd = this.cmd;
 
         const branch = btree.get(name);
-        cmd.checkout(name).push();
+        cmd.checkout(name);
         Object.keys(branch).forEach(child => {
             Console.info(`push origin/${child}`);
             cmd.checkout(child).push();
@@ -131,12 +177,38 @@ class App {
     }
 }
 
+function confirm (files, thries) {
+
+    const q = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+
+    return new Promise((resolve, reject) => {
+        q.question(([
+            `發現衝突檔案 ${files.join(', ')}`,
+            `以下檔案 ${ChooseThriesMergeFiles.join(', ')} 預設以 ${thries} 分支為主合併，`,
+            `是否同意 (y/n)？`
+        ]).join('\r\n'), input => {
+            if (input === 'y') {
+                resolve();
+            } else {
+                Console.warning('中斷執行');
+                reject();
+            }
+            q.close();
+        });
+    });
+}
+
 rl.question(`key in sg site : ${Object.keys(TYPES).join(', ')}\n`, input => {
 
     const app = new App(input, branchC);
     // app.pull('Cross_day');
-    app.push('Cross_day');
-    // app.merge('Cross_day');
+    // app.push('Cross_day');
+    app.push('master-temp');
+    // app.merge('master-temp');
     // app.reset('Cross_day');
     rl.close();
 });
