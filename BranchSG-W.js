@@ -45,40 +45,25 @@ btree.append('master', () => {
         'sg34',
         'sg28',
         '2018-redis',
-        'Cross_day',
-        'offset_odds',
-        'new_Log',
     ]).forEach(name => {
         btree.add(name);
     });
 });
 
 btree.append('2018-redis', () => {
-    btree.add('2018-Casino');
     btree.add('2018-redis-cross_day');
 });
 
-btree.get('2018-redis-cross_day').add('sg36');
+btree.get('2018-redis-cross_day')
+    .add('sg36')
+    .add('2018-redis-cross_day-newCasino');
+btree.append('2018-redis-cross_day-newCasino', () => {
 
-btree.append('Cross_day', () => {
-
-    btree.add('2018-redis-cross_day');
-    btree.add('sg15');
-    btree.add('sg16');
-    btree.add('sg33');
-
-});
-
-btree.get('offset_odds').add('sg88');
-btree.get('new_Log').add('sg84');
-btree.get('2018-redis-cross_day').add('2018-redis-cross_day_newCasino');
-
-btree.append('2018-redis-cross_day_newCasino', () => {
-    btree.add('sg49');
-    btree.add('sg46');
     btree.add('sg17');
-});
+    btree.add('sg46');
+    btree.add('sg49');
 
+});
 
 btree.get('master');
 

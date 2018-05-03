@@ -7,16 +7,35 @@ module.exports = class BranchTree {
 
         this.tree = {};
         this.tree[root] = {};
+        this.current = this.tree[root];
     }
 
-    add (name, child) {
+    append(parent, fn) {
+        if (!(parent in this.tree)) {
+            throw new Error(`unknown ${parent} branch`);
+        }
+        const cacheBranch = this.current;
+        this.current = this.tree[parent];
+        fn(this);
+        this.current = cacheBranch;
+    }
+
+    checkout (name) {
         if (!(name in this.tree)) {
-            throw new Error(`not found ${name}`);
+            throw new Error(`unknown ${name} branch`);
         }
-        if (!(child in this.tree)) {
-            this.tree[child] = {};
+        this.current = this.tree[name];
+
+    }
+
+    add (branch) {
+        if (!this.current) {
+            throw new Error(`no set current branch, please run "obj.get({parent branch}).add(${branch});"`);
         }
-        this.tree[name][child] = this.tree[child];
+        if (!(branch in this.tree)) {
+            this.tree[branch] = {};
+        }
+        this.current[branch] = this.tree[branch];
         return this;
     }
 
@@ -24,8 +43,11 @@ module.exports = class BranchTree {
         if (!(name in this.tree)) {
             throw new Error(`not found ${name}`);
         }
-        return this.tree[name];
+        this.current = this.tree[name];
+        return this;
     }
-
+    forEach(fn) {
+        Object.keys(this.current).forEach(fn);
+    }
 
 };

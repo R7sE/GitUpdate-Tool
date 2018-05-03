@@ -2,11 +2,12 @@ const GitCommand = require('./src/GitCommand');
 const Console = require('./src/console');
 const readline = require('readline');
 const branchC = require('./BranchSG-C');
-// const branchC = require('./TempTree');
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
+const branchW = require('./BranchSG-W');
+const moment = require('moment');
+// const rline = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout,
+// });
 const TYPES = {
     a: 'D:/work/GitHub/sg44_a',
     m: 'D:/work/GitHub/sg44_m',
@@ -20,16 +21,35 @@ const ChooseThriesMergeFiles = [
     'tpl/bet_list.php',
 ];
 
+function input (message, fn) {
+    const rin = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+    const promise = new Promise(resolve => {
 
+        rin.question(message, value => {
+            fn(value);
+            rin.close();
+            resolve();
+        });
+    })
+
+    return promise;
+}
 
 class App {
 
-    constructor (type, branchTree) {
+    constructor (type) {
 
         if (!(type in TYPES)) {
             throw new Error(`type unknown : ${type}`);
         }
-        this.branchTree = branchTree;
+        this.branchTree = ({
+            c: branchC,
+            w: branchW,
+
+        })[type];
         this.SGType = type;
         this.now = new Date();
 
@@ -44,13 +64,21 @@ class App {
         const branch = btree.get(name);
         let promise = Promise.resolve();
 
-
-        Object.keys(branch).forEach(child => {
+        btree.get(name).forEach(child => {
+        // Object.keys(branch).forEach(child => {
             promise = promise.then(() => {
                 return new Promise((resolve, reject) => {
 
+                    cmd.checkout(child);
+
+                    if (cmd.instanceOf(name)) {
+                        Console.warning(`alrady merge ${child} > ${name}`);
+                        resolve();
+                        return;
+                    }
+
                     Console.info(`merge ${child} & ${name}`);
-                    cmd.checkout(child).merge(name);
+                    cmd.merge(name);
 
                     /* 衝突檔案 */
                     const unmergeModifys = cmd.unmergeModifys();
@@ -97,8 +125,9 @@ class App {
         const btree = this.branchTree;
         const cmd = this.cmd;
 
-        const branch = btree.get(name);
-        Object.keys(branch).forEach(child => {
+        // const branch = btree.get(name);
+        btree.get(name).forEach(child => {
+        // Object.keys(branch).forEach(child => {
             Console.info(`pull origin/${child}`);
             cmd.checkout(child).pull();
             this.pull(child);
@@ -110,9 +139,11 @@ class App {
         const btree = this.branchTree;
         const cmd = this.cmd;
 
-        const branch = btree.get(name);
+        // const branch = btree.get(name);
         cmd.checkout(name);
-        Object.keys(branch).forEach(child => {
+
+        btree.get(name).forEach(child => {
+        // Object.keys(branch).forEach(child => {
             Console.info(`push origin/${child}`);
             cmd.checkout(child).push();
             this.push(child);
@@ -124,8 +155,9 @@ class App {
         const btree = this.branchTree;
         const cmd = this.cmd;
 
-        const branch = btree.get(name);
-        Object.keys(branch).forEach(child => {
+        // const branch = btree.get(name);
+        btree.get(name).forEach(child => {
+        // Object.keys(branch).forEach(child => {
             Console.info(`重設 ${child} 至 origin/${child}`);
             cmd.checkout(child).reset(`origin/${child}`);
             this.reset(child);
@@ -152,25 +184,17 @@ class App {
             javaserver: `javaserver${sg}`,
         })[this.SGType];
 
-        let step = 30;
-
-        let date = this.now;
-        let YMD = ([
-            date.getFullYear(),
-            `0${(date.getMonth() + 1)}`.substr(-2),
-            `0${date.getDate()}`.substr(-2),
-        ]).join('');
-        let minute = Math.floor(date.getMinutes() / step) * step;
-        let HM = ([
-            `0${date.getHours()}`.substr(-2),
-            `0${minute}`.substr(-2),
-        ]).join('');
+        /* 30 min 一個區間 */
+        const step = 30 * 60 * 1000;
+        const ms = Math.floor(new Date().getTime() / step) * step;
+        const time = moment(ms);
+        const dir = moment().format('YYYYMMDD-HHmm');
         this.cmd.exportDiff({
             baseSHA,
             newSHA,
             exceStatus: ['D'],
             exceFile: ['^conf', '^.git', '^\.conf', 'config\.php'],
-            outpath: `D:/work/UpdateQueue/${YMD}-${HM}`,
+            outpath: `D:/work/UpdateQueue/${dir}`,
             dirname,
         });
 
@@ -202,13 +226,59 @@ function confirm (files, thries) {
     });
 }
 
-rl.question(`key in sg site : ${Object.keys(TYPES).join(', ')}\n`, input => {
+(() => {
+    const inputData = {
+        site: null,
+        action: null,
+        branch: null,
+    };
+    input(`key in sg site : ${Object.keys(TYPES).join(', ')}\n`, site => {
+        Console.info('s');
+        inputData.site = site;
+    }).then(() => {
+        Console.info('a');
 
-    const app = new App(input, branchC);
-    // app.pull('Cross_day');
-    // app.push('Cross_day');
-    app.push('master-temp');
-    // app.merge('master-temp');
-    // app.reset('Cross_day');
-    rl.close();
-});
+        return input('key in action: merge, push, pull, reset \n', action => {
+            inputData.action = action;
+        });
+    }).then(() => {
+        Console.info('b');
+
+        return input('key in branch name \n', branch => {
+            inputData.branch = branch;
+        });
+    }).then(() => {
+        const app = new App(inputData.site);
+        switch (inputData.action) {
+            case 'merge':
+                app.merge(inputData.branch);
+                break;
+            case 'push':
+                app.push(inputData.branch);
+                break;
+            case 'pull':
+                app.pull(inputData.branch);
+                break;
+            case 'reset':
+                app.reset(inputData.branch);
+                break;
+            default:
+                Console.error(`unknown action ${inputDasta.action}`);
+
+        }
+    });
+})();
+
+// rline.question(`key in sg site : ${Object.keys(TYPES).join(', ')}\n`, input => {
+
+//     const app = new App(input);
+//     // app.pull('Cross_day');
+//     // app.push('Cross_day');
+//     // app.merge('2018-redis-cross_day_newCasino');
+//     app.push('2018-redis-cross_day_newCasino');
+
+//     // app.push('master-temp');
+//     // app.merge('master-temp');
+//     // app.reset('Cross_day');
+//     rline.close();
+// });

@@ -94,9 +94,19 @@ class GitCommand {
         return this;
     }
 
+    instanceOf (name) {
+        const sha1 = this.sha1(name);
+        const baseSHA1 = this.execResult(`git merge-base HEAD ${name}`).trim();
+        return sha1 === baseSHA1;
+    }
+
     push (callback = null) {
         let name = `origin ${this.branchName}`;
         return this.exec(`git push ${name}`, callback);
+    }
+
+    sha1 (name = 'HEAD') {
+        return this.execResult(`git rev-parse ${name}`).trim();
     }
 
     pull (callback = null) {
