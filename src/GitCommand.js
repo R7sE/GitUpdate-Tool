@@ -159,10 +159,7 @@ class GitCommand {
 
     reset (name, _hard = true) {
         let hard = _hard ? '--hard' : '';
-        this.exec(`git reset ${hard} ${name}`)
-
-
-
+        this.exec(`git reset ${hard} ${name}`);
     }
 
     exportDiff({baseSHA, newSHA, outpath, dirname, exceStatus = null, exceFile = null}) {

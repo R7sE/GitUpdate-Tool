@@ -17,8 +17,8 @@ const TYPES = {
 };
 
 const ChooseThriesMergeFiles = [
-    'control/outbet/star234.php',
-    'tpl/bet_list.php',
+    // 'control/outbet/star234.php',
+    // 'tpl/bet_list.php',
 ];
 
 function input (message, fn) {
@@ -33,7 +33,7 @@ function input (message, fn) {
             rin.close();
             resolve();
         });
-    })
+    });
 
     return promise;
 }
@@ -130,7 +130,14 @@ class App {
         btree.get(name).forEach(child => {
         // Object.keys(branch).forEach(child => {
             Console.info(`pull origin/${child}`);
-            cmd.checkout(child).pull();
+            cmd.checkout(child);
+            if (!cmd.branchExists(`origin/${child}`)) {
+                Console.error(`remote no find origin/${child}`);
+            } else if (cmd.sha1(child) === cmd.sha1(`origin/${child}`)) {
+                Console.warning('already sync');
+            } else {
+                cmd.pull();
+            }
             this.pull(child);
         });
 
@@ -221,8 +228,8 @@ function confirm (files, thries) {
             `發現衝突檔案 ${files.join(', ')}`,
             `以下檔案 ${ChooseThriesMergeFiles.join(', ')} 預設以 ${thries} 分支為主合併，`,
             `是否同意 (y/n)？`
-        ]).join('\r\n'), input => {
-            if (input === 'y') {
+        ]).join('\r\n'), v => {
+            if (v === 'y') {
                 resolve();
             } else {
                 Console.warning('中斷執行');
@@ -240,17 +247,13 @@ function confirm (files, thries) {
         branch: null,
     };
     input(`key in sg site : ${Object.keys(TYPES).join(', ')}\n`, site => {
-        Console.info('s');
         inputData.site = site;
     }).then(() => {
-        Console.info('a');
 
         return input('key in action: merge, push, pull, reset \n', action => {
             inputData.action = action;
         });
     }).then(() => {
-        Console.info('b');
-
         return input('key in branch name \n', branch => {
             inputData.branch = branch;
         });
@@ -270,7 +273,7 @@ function confirm (files, thries) {
                 app.reset(inputData.branch);
                 break;
             default:
-                Console.error(`unknown action ${inputDasta.action}`);
+                Console.error(`unknown action ${inputData.action}`);
 
         }
     });
