@@ -38,6 +38,7 @@ function input (message, fn) {
     return promise;
 }
 
+
 class App {
 
     constructor (type) {
@@ -73,7 +74,7 @@ class App {
 
                     if (cmd.instanceOf(name)) {
                         Console.warning(`alrady merge ${child} > ${name}`);
-                        resolve();
+                        this.merge(child).then(resolve);
                         return;
                     }
 
@@ -145,7 +146,14 @@ class App {
         btree.get(name).forEach(child => {
         // Object.keys(branch).forEach(child => {
             Console.info(`push origin/${child}`);
-            cmd.checkout(child).push();
+            cmd.checkout(child);
+            if (! cmd.branchExists(`origin/${child}`)) {
+                Console.error(`remote no find origin/${child}`);
+            } else if (cmd.sha1(child) === cmd.sha1(`origin/${child}`)) {
+                Console.warning('already sync');
+            } else {
+                cmd.push();
+            }
             this.push(child);
         });
 
@@ -187,8 +195,7 @@ class App {
         /* 30 min 一個區間 */
         const step = 30 * 60 * 1000;
         const ms = Math.floor(new Date().getTime() / step) * step;
-        const time = moment(ms);
-        const dir = moment().format('YYYYMMDD-HHmm');
+        const dir = moment(ms).format('YYYYMMDD-HHmm');
         this.cmd.exportDiff({
             baseSHA,
             newSHA,

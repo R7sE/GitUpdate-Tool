@@ -41,6 +41,15 @@ class GitCommand {
         // });
     }
 
+    branchExists (name) {
+        try {
+            this.execResult(`git show-branch ${name}`);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     checkout (name, callback) {
         // return this.exec(`git checkout -b ${name}`, callback);
         try {

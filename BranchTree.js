@@ -18,6 +18,7 @@ module.exports = class BranchTree {
         this.current = this.tree[parent];
         fn(this);
         this.current = cacheBranch;
+        return this;
     }
 
     checkout (name) {
