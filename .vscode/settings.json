@@ -1,260 +1,65 @@
 // 將您的設定放入此檔案中以覆寫預設值和使用者設定。
 {
-
-    "typescript.check.tscVersion": false,
+	"editor.stablePeek": true,
+	"php.executablePath": "E:/Software/EasyPHP-Devserver-17/eds-binaries/php/php713vc14x86x180515131554/php.exe",
+  	"workbench.editor.enablePreview": false,
 	"workbench.editor.enablePreviewFromQuickOpen": false,
 	"editor.fontSize": 13,
-	// Configure glob patterns for excluding files and folders.
+	"editor.minimap.enabled": true,
+	"php.suggest.basic": true,
+	"typescript.referencesCodeLens.enabled": true,
 	"files.exclude": {
 		"**/.git": true,
 		"**/.DS_Store": true,
-        "./**/node_modules/*" : true,
-        "**/templete_c": true,
-        "**/templetes_c": true
+		"**/node_modules/*": true,
+		"**/template_c": true,
+		"**/templates_c": true,
+		"public/**/*": true,
+		"www/css/*": true
 	},
 	"files.trimTrailingWhitespace": true,
-    "files.associations": {
-        "*.tpl": "html",
-        "*.vue": "vue"
-    },
+	"files.trimFinalNewlines": true,
+	"editor.rulers": [80, 120],
+	"window.zoomLevel": 1,
+	"git.enableSmartCommit": true,
+	"git.autofetch": true,
 	"eslint.enable": true,
-	"autoprefixer.formatOnSave": false,
-    "less.compile": {
-        "compress": false
-    },
-    "eslint.options": {
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact", {
+			"language": "vue",
+			"autoFix": true
+		}
+	],
+	"eslint.options": {
+		"plugins": ["html"],
+        "extensions": [".js", ".html", ".vue"],
         "parserOptions": {
 			"ecmaVersion": 6,
             "sourceType": "module"
 		},
-		"globals": ["define", "require", "jQuery"],
+		"globals": ["__dirname", "define", "require", "jQuery"],
 		"rules": {
-
-			/* 參考 http://eslint.cn/docs/rules */
-			// Possible Errors
-			"comma-dangle": [0, "always"],  // js 物件最後一個結尾加上逗號
-			"no-cond-assign": [2, "always"], // 檢查條件句使用 assign，如 if(foo = 1) ...
-			"no-console": 1, // 不使用 console
-			"no-constant-condition": 2, // 不使用已知的條件式，如 if(1 > 2) ...
-			"no-control-regex": 0,   // 不太了解
-			"no-debugger": 2, // 不使用 debugger;
-			"no-dupe-args": 2, // 檢查 function 重複名稱參數
-			"no-dupe-keys": 2, // 檢查物件重複 key 名稱
-			"no-duplicate-case": 2, // 檢查 switch case 相同 case
-			"no-empty-character-class": 2, // 表達式中的 [] 內容不能為空
-			"no-empty": 2, // 禁止空的條件式或迴圈
-			"no-ex-assign": 2, // 禁止 assign 值給 exception 參數
-			"no-extra-boolean-cast": 0, // 禁止強制轉換布林，如 var foo = !!!bar;
-			"no-extra-parens": [2, "functions"], // 禁止多餘的括號
-			"no-extra-semi": 2, // 禁止多餘的分號
-			"no-func-assign": 2, // 禁止 function 被 assign
-			"no-inner-declarations": 2, // 禁止在程式或 function 內宣告變數
-			"no-invalid-regexp": 2, // 禁止無效的表達式
-			"no-irregular-whitespace": 0, // 檢查不規則的空格 (不了解)
-			"no-negated-in-lhs": 2, // in 操作，左側禁用否定，如 if(!foo in x) ...
-			"no-obj-calls": 2, // Disallow Global Object Function Calls
-			"no-regex-spaces": 2, // 表達式禁用兩個以上空格，超過請改寫為 /foo {3}/
-			"no-sparse-arrays": 2, // Disallow Sparse Arrays, ex: [1, , 2]
-			"no-unexpected-multiline": 2, // Avoid unexpected multiline expressions
-			"no-unreachable": 2, // 檢查不會執行到的程式碼
-			"use-isnan": 2, // 禁止比較時使用NaN，只能用isNaN()
-			"valid-jsdoc": [1, {"requireReturn": false}], // 驗證 jsdoc 語法是否正確
-			"valid-typeof": 2, // 檢查 typeof 的值是否符合
-
-			// Best Practices
-			"accessor-pairs": 0, // Enforces getter/setter pairs in objects
-			"block-scoped-var": 1, // 檢查條件區塊宣告變數，在區塊外使用該變數
-			"complexity": [0, 11], // 檢查程式複雜度
-			"consistent-return": 0, // Require Consistent Returns
-			"curly": 2, // if 使用括號
-			"default-case": 2, // switch 語句最後必須有 default
-			"dot-location": [1, "property"], // 物件訪問符的位置，換行的時候在行首還是行尾
-			"dot-notation": [0, { "allowKeywords": true }], //避免不必要的方括號
-			"eqeqeq": [2, "smart"], // 必須使用全等
-			"guard-for-in": 0, // for in 循環要用 if 語句過濾
-			"no-alert": 0, // 禁用 alert
-			"no-caller": 0, // 禁用 caller / callee
-			"no-case-declarations": 2, // 禁止在 switch 語句中宣告變數
-			"no-div-regex": 1, // 禁用看起來像除法的表達式，如 return /=foo/
-			"no-else-return": 2, // 禁止在 else 語句中 return
-			"no-empty-label": 0, //禁止使用空 label
-			"no-empty-pattern": 0, // Disallow empty destructuring patterns
-			"no-eq-null": 2, // 禁止對 null 使用 == 或 != 運算符
-			"no-eval": 2, // 禁止使用 eval
-			"no-extend-native": 2, //禁止擴展native對象
-			"no-extra-bind": 0, // Disallow unnecessary function binding
-			"no-fallthrough": 2, // switch 語句條件中須有 break
-			"no-floating-decimal": 2, // 禁止省略浮點數中的 0 如 .5  3.
-			"no-implicit-coercion": 1, // Disallow the type conversion with shorter notations.
-			"no-implied-eval": 2, // 禁用隱藏式的 eval
-			"no-invalid-this": 1, // 禁止無效的 this，只能用在構造器、類與對象字面量 - /* @this HTMLElement */
-			"no-iterator": 2, // 禁止使用__iterator__ 屬性
-			"no-labels": 2, // 禁止標籤聲明
-			"no-lone-blocks": 2, // 禁止不必要的 {} 區塊
-			"no-loop-func": 1, // 禁止在循環中使用函數(如果沒有引用外部變量不形成閉包就可以)
-			"no-magic-numbers": 0, // Disallow Magic Numbers
-			"no-multi-spaces": 1, // 禁用多餘空格
-			"no-multi-str": 1, // 字串不能用斜線換行
-			"no-native-reassign": 2, // 禁止複寫原生物件
-			"no-new-func": 1, // 禁止使用new Function
-			"no-new-wrappers": 2, // 禁止使用 new 創建包裝實例，new String, new Boolean, new Number
-			"no-new": 1, // 禁止使用 new 建構一個實例後不賦值
-			"no-octal-escape": 2, // 禁止使用八進制轉義序列
-			"no-octal": 2, // 禁止使用八進制數字
-			"no-param-reassign": 1, // 禁止給參數重新賦值
-			"no-process-env": 0, // no-process-env
-			"no-proto": 2, // 禁止使用 __proto__ 屬性
-			"no-redeclare": 2, // 禁止重複宣告變數
-			"no-return-assign": 1, // return 語句中不能有賦值表達式
-			"no-script-url": 0, // 禁止使用javascript:void(0)
-			"no-self-compare": 2, // 禁止比較自己 foo === foo
-			"no-sequences": 0, // 禁止使用逗號運算符
-			"no-throw-literal": 1, // 禁止拋出字面量錯誤 throw "error"
-			"no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true }], // 禁用無用的表達式
-			"no-useless-call": 2, // 禁止不必要的 call 和 apply
-			"no-useless-concat": 2, // 禁止不必要的運算，如 1 + 0
-			"no-void": 2, // 禁用 void 操作符
-			"no-warning-comments": [1, { "terms": ["todo", "fixme", "xxx"], "location": "start" }], // 不能有警告備註
-			"no-with": 1, // 禁用 with
-			"object-property-newline": [2, { "allowMultiplePropertiesPerLine": true }],   //强制将对象的属性放在不同的行上
-			"radix": [2, "always"], // parseInt 須指定第二個參數
-			"vars-on-top": 0, // 變數宣告在頂部
-			"wrap-iife": [2, "outside"], // 立即執行函數表達式的小括號風格
-			"yoda": [2, "never"], // 禁止尤達條件
-
-			// Strict Mode
-			"strict": 2, //使用嚴格模式
-
-			// Variables
-			"init-declarations": 0, // 變數宣告時必須賦初值
-			"no-catch-shadow": 2, // 禁止 catch子句參數與外部作用域變數同名
-			"no-delete-var": 2, // 不能對 var 宣告的變數使用 delete 操作
-			"no-label-var": 2, // label 名不能與 var 宣告的變數名相同
-			"no-shadow-restricted-names": 2, // 嚴格模式中規定的內建變數不能作為宣告時的變數名使用
-			"no-shadow": 2, // 區域變數名稱不能與外部變數名稱相同
-			"no-undef-init": 2, // 宣告變數時不能直接給它賦值為 undefined
-			"no-undef": 2, // 不能有未定義的變量 /* global $, React */
-			"no-undefined": 2, // 不能使用 undefined
-			"no-unused-vars": [2, {"vars": "all", "args": "after-used"}], // 不能有宣告後未被使用的變數或參數
-			"no-use-before-define": [2, "nofunc"], // 未定義前不能使用
-
-			// Stylistic Issues
-			"array-bracket-spacing": [2, "never"], // 是否允許非空陣列裡面有多餘的空格
-			"block-spacing": [2, "always"], // 是否允許區塊內多餘空格
-			"brace-style": [2, "1tbs", { "allowSingleLine": true }], // 大括號風格
-			"camelcase": 0, // 強制駝峰命名法
-			"comma-spacing": [2, { "before": false, "after": true }], // 逗號前後空格
-			"comma-style": [2, "last"], // 逗號風格，換行時在行首還是行尾
-			"computed-property-spacing": [2, "never"], // Disallow or enforce spaces inside of computed properties.
-			"consistent-this": [1, "self"], // this 別名
-			"eol-last": 0, // 文件以單一的換行符結束
-			"func-names": 0, // 函數必須有名字
-			"func-style": [0, "declaration"], // 函數風格，規定只能使用宣告函數 / 表達式函數
-			"id-length": [1, {"min": 1}], // 變數名稱長度
-			"id-match": 0, // 變數命名檢測
-			"indent": [2, 4, {"SwitchCase": 1}], // 縮排風格
-			"jsx-quotes": 0, // Enforce JSX Quote Style
-			"key-spacing": [1, { "beforeColon": false, "afterColon": true }], // 物件中冒號的前後空格
-			"linebreak-style": [0, "unix"], // 換行風格
-			"lines-around-comment": [0, { "beforeBlockComment": true, "afterBlockComment": false }], // 行前 / 行後備註
-			"max-depth": [0, 4], // { } 區塊深度
-			"max-len": [0, 80, 4], // 字串最大長度
-			"max-nested-callbacks": [0, 2], // callback 深度
-			"max-params": [2, 3], // function 參數數量限制
-			"max-statements": [0, 10], // 函數內最多有幾個宣告
-			"new-cap": [2, {"capIsNewExceptions": ["Deferred"]}],// 函數名大寫必須使用 new 方式調用，小寫必須用不帶 new 方式調用
-
-			"new-parens": 2, // new 時必須加小括號
-			"newline-after-var": 0, // 宣告變數後是否需要空一行
-			"no-array-constructor": 2, // 禁止使用 Array 建構式
-			"no-bitwise": 0, // 禁止使用按位運算符
-			"no-continue": 0, // 禁止使用 continue
-			"no-inline-comments": 0, // 禁止行內備註
-			"no-lonely-if": 2, // 禁止 else 語句內只有 if 語句
-			"no-mixed-spaces-and-tabs": [2, false], // 禁止混用 tab 和空格
-			"no-multiple-empty-lines": [1, {"max": 2}], // 最大空行限制
-			"no-negated-condition": 1, // if 語句中禁用否定條件
-			"no-nested-ternary": 0, // 禁止使用三元運算式
-			"no-new-object": 2, // 禁止使用 new Object()
-			"no-plusplus": 0, // 禁止使用 ++ --
-			"no-restricted-syntax": 0, // 禁用某些語法
-			"no-spaced-func": 2, // 函數調用時，函數名與 () 之間不能有空格
-			"no-ternary": 0, // 禁止使用三元運算式
-			"no-trailing-spaces": 2, // 一行結束後面不要有空格
-			"no-underscore-dangle": [2, { "allowAfterThis": true }], // 變數不能以 _ 開頭或結尾
-			"no-unneeded-ternary": 2, // 禁止不必要的嵌套 var isYes = answer === 1 ? true : false;
-			"no-whitespace-before-property": 2, //禁止属性前有空白
-			"object-curly-spacing": [2, "never"], // 大括號內是否允許不必要的空格
-			"one-var": [1, "never"], // 連續宣告
-			"operator-assignment": [0, "always"], // Operator Assignment Shorthand
-			"operator-linebreak": [2, "after"], // 換行時運算符在行尾還是行首
-			"padded-blocks": 0, // 塊語句內行首行尾是否要空行
-			"quote-props": [2, "as-needed"], // 物件中的屬性名稱是否強制雙引號
-			"quotes": [0, "single"], // 引號類型
-			"require-jsdoc":[1, {
-				"require": {
-					"FunctionDeclaration": true,
-					"MethodDefinition": true,
-					"ClassDeclaration": true
-				}
-			}],
+			"extends": "off",
+			"indent": ["error", 4, {"SwitchCase": 1}],
 			"semi-spacing": [2, {"before": false, "after": true}], // 分號前後空格
 			"semi": [2, "always"], // 結尾加上分號
-			"sort-vars": 0, // 宣告變數時排序
-			// "space-after-keywords": [2, "always"], // 關鍵字後面是否要空一格
-			"keyword-spacing": 2, // 關鍵字後面是否要空一格
-			"space-before-blocks": [2, "always"], // 不以新行開始的區塊 { 前面是否有空格
-			"space-before-function-paren": [0, "always"], // 函數定義時括號前面要不要有空格
-			"space-in-parens": [2, "never"], // 小括號裡面要不要有空格
-			"space-infix-ops": 2, // 操作符(+-*/?:...)周圍要不要有空格
-			"space-unary-ops": [0, { "words": true, "nonwords": false }], // 一元運算符的前後要不要加空格
-			"spaced-comment": 0, // Requires or disallows a whitespace (space or tab) beginning a comment
-			"wrap-regex": 0 // 正則表達式字面量用小括號包起來
-
-			// Node.js and CommonJS
-
-			// ECMAScript 6
-
-			// react
-			// "react/display-name": 0,
-			// "react/forbid-prop-types": 0,
-			// "react/jsx-boolean-value": 0,
-			// "react/jsx-closing-bracket-location": 2, // 檢查 JSX 結尾位置
-			// "react/jsx-curly-spacing": [2, "never"], // 檢查 JSX 參數大括號空格
-			// "react/jsx-handler-names": 1, // JSX 事件名稱規範
-			// "react/jsx-indent-props": [2, 4], // JSX 參數縮排
-			// "react/jsx-key": 0, // 檢測 JSX 是否含有 key 屬性
-			// "react/jsx-max-props-per-line": [1, {"maximum": 2}], // 檢查 JSX 單行時，最大屬性數量
-			// "react/jsx-no-bind": 1, // 在 JSX 參數禁用 bind()
-			// "react/jsx-no-duplicate-props": 2, // 檢查 JSX 重複屬性
-			// "react/jsx-no-literals": 0, // 檢查未包裹的 JSX 字串
-			// "react/jsx-no-undef": 2, // JSX 中禁用未宣告變數
-			// "react/jsx-pascal-case": 2, // 使用大駝峰命名 JSX 元素
-			// "react/jsx-quotes": [1, "single"], // JSX 使用引號風格
-			// "react/jsx-sort-prop-types": 0, // 參數依字母排序
-			// "react/jsx-sort-props": 0, // Enforce props alphabetical sorting
-			// "react/jsx-uses-react": 2, // 檢查未使用的 React 物件
-			// "react/jsx-uses-vars": 2, // 檢查未使用的 JSX 變數
-			// "react/no-danger": 1, // 禁用危險(特殊)的 JSX 用法
-			// "react/no-deprecated": 1, // 檢查不建議的使用方法
-			// "react/no-did-mount-set-state": 2, // 防止在 componentDidMount 使用 setState
-			// "react/no-did-update-set-state": 2, // 防止在 componentDidUpdate 使用 setState
-			// "react/no-direct-mutation-state": 2, // 防止直接修改 this.state
-			// "react/no-is-mounted": 1, // 禁用 isMounted
-			// "react/no-multi-comp": 0, // 防止在單一文件使用多個 component
-			// "react/no-set-state": 0, // 禁止在本地組件使用 setState
-			// "react/no-unknown-property": 2, // 禁用限制的屬性，如 class
-			// "react/prefer-es6-class": 0, // 在 React 使用 es5 或 es6 的 class 元件
-			// "react/prop-types": 0, // 防止使用未驗證的 props (使用 propTypes)
-			// "react/react-in-jsx-scope": 2, // Prevent missing React when using JSX
-			// "react/require-extension": 0, // Restrict file extensions that may be required
-			// "react/self-closing-comp": 2, // 如果沒有子節點，使用 /> 結尾
-			// "react/sort-comp": 2, // 強制元素方法排版：生命週期 > 自訂方法 > render
-			// "react/wrap-multilines": 2 // 防止多行 JSX 排版缺少括號
-
+			"no-console": 1, // 不使用 console
+			"operator-linebreak": [0, "after", { "overrides": { "?": "before", ":": "before" } }]
 		}
-
-    }
-,
-"window.zoomLevel": 1
+	},
+	"diffEditor.ignoreTrimWhitespace": true,
+	"gitlens.keymap": "alternate",
+	"gitlens.advanced.messages": {
+		"suppressCommitHasNoPreviousCommitWarning": false,
+		"suppressCommitNotFoundWarning": false,
+		"suppressFileNotUnderSourceControlWarning": false,
+		"suppressGitVersionWarning": false,
+		"suppressLineUncommittedWarning": false,
+		"suppressNoRepositoryWarning": false,
+		"suppressResultsExplorerNotice": false,
+		"suppressShowKeyBindingsNotice": true
+	},
+	"workbench.editor.closeOnFileDelete": false,
+	// "search.location": "panel"
 }

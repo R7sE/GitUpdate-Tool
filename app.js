@@ -4,16 +4,16 @@ const readline = require('readline');
 const branchC = require('./BranchSG-C');
 const branchW = require('./BranchSG-W');
 const moment = require('moment');
-// const rline = readline.createInterface({
-//     input: process.stdin,
-//     output: process.stdout,
-// });
+const path = require('path');
+
+const UpdateFilesPath = path.resolve(__dirname, '../UpdateFiles') + '/';
+
 const TYPES = {
-    a: 'D:/work/GitHub/sg44_a',
-    m: 'D:/work/GitHub/sg44_m',
-    c: 'D:/work/GitHub/sg44_c',
-    w: 'D:/work/GitHub/sg44_w',
-    javaserver: 'D:/work/GitHub/javaserver44'
+    a: path.resolve(__dirname, '../sg44_a'),
+    m: path.resolve(__dirname, '../sg44_m'),
+    c: path.resolve(__dirname, '../sg44_c'),
+    w: path.resolve(__dirname, '../sg44_w'),
+    javaserver: path.resolve(__dirname, '../javaserver44'),
 };
 
 const ChooseThriesMergeFiles = [
@@ -148,7 +148,7 @@ class App {
         const cmd = this.cmd;
 
         // const branch = btree.get(name);
-        cmd.checkout(name);
+        // cmd.checkout(name);
 
         btree.get(name).forEach(child => {
         // Object.keys(branch).forEach(child => {
@@ -208,7 +208,7 @@ class App {
             newSHA,
             exceStatus: ['D'],
             exceFile: ['^conf', '^.git', '^\.conf', 'config\.php'],
-            outpath: `D:/work/UpdateQueue/${dir}`,
+            outpath: UpdateFilesPath + dir,
             dirname,
         });
 

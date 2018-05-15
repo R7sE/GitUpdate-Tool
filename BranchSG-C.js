@@ -34,7 +34,6 @@ btree.append('master', () => {
     btree.add('sg43');
     btree.add('sg51');
     btree.add('sg7');
-    btree.add('sg42');
     btree.add('sg41');
     btree.add('sg45');
     btree.add('sg0');
@@ -67,9 +66,14 @@ btree.get('Cross_day')
         .add('sg36')
         .add('2018-redis-cross_day-newCasino')
         .get('2018-redis-cross_day-newCasino')
-            .add('sg17')
-            .add('sg46')
-            .add('sg49')
-            .add('dev-180503-percent');
+            .add('new_user_edit')
+            .add('edit')
+            .get('edit')
+                .add('sg17')
+                .add('sg46')
+                .add('sg49')
+                .add('sg35')
+                .add('sg47')
+                .add('sg42');
 
 module.exports = btree;
