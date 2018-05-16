@@ -47,6 +47,9 @@ module.exports = class BranchTree {
         this.current = this.tree[name];
         return this;
     }
+    addGet(name) {
+        return this.add(name).get(name);
+    }
     forEach(fn) {
         Object.keys(this.current).forEach(fn);
     }

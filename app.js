@@ -5,6 +5,7 @@ const branchC = require('./BranchSG-C');
 const branchW = require('./BranchSG-W');
 const moment = require('moment');
 const path = require('path');
+const fs = require('fs');
 
 const UpdateFilesPath = path.resolve(__dirname, '../UpdateFiles') + '/';
 
@@ -62,7 +63,6 @@ class App {
         const btree = this.branchTree;
         const cmd = this.cmd;
 
-        const branch = btree.get(name);
         let promise = Promise.resolve();
 
         btree.get(name).forEach(child => {
@@ -71,42 +71,41 @@ class App {
                 return new Promise((resolve, reject) => {
 
                     cmd.checkout(child);
-
-                    if (cmd.instanceOf(name)) {
-                        Console.warning(`alrady merge ${child} > ${name}`);
-                        this.merge(child).then(resolve);
-                        return;
-                    }
-
-                    Console.info(`merge ${child} & ${name}`);
-                    cmd.merge(name);
-
-                    /* 衝突檔案 */
-                    const unmergeModifys = cmd.unmergeModifys();
                     const unmergePromise = new Promise((umResolve, umReject) => {
-                        if (unmergeModifys.length) {
-                            confirm(unmergeModifys, name).then(() => {
-                                const unmergeFiles = unmergeModifys.filter(fname => {
-                                    if (ChooseThriesMergeFiles.indexOf(fname) >= 0) {
-                                        cmd.chooseThries(fname).added(fname);
-                                        return false;
-                                    }
-                                    return true;
-                                });
-
-                                if (unmergeFiles.length) {
-                                    umReject();
-                                    throw new Error('未處理的衝突檔案 : ' + unmergeFiles.join(', '));
-                                } else {
-                                    Console.info(`Commit ${child}`);
-                                    cmd.commit('auto merge');
-                                    umResolve();
-                                }
-                            });
-                        } else {
+                        if (cmd.instanceOf(name)) {
+                            Console.warning(`alrady merge ${child} > ${name}`);
                             umResolve();
+                        } else {
+                            Console.info(`merge ${child} & ${name}`);
+                            cmd.merge(name);
+
+                            /* 衝突檔案 */
+                            const unmergeModifys = cmd.unmergeModifys();
+                            if (unmergeModifys.length) {
+                                confirm(unmergeModifys, name).then(() => {
+                                    const unmergeFiles = unmergeModifys.filter(fname => {
+                                        if (ChooseThriesMergeFiles.indexOf(fname) >= 0) {
+                                            cmd.chooseThries(fname).added(fname);
+                                            return false;
+                                        }
+                                        return true;
+                                    });
+
+                                    if (unmergeFiles.length) {
+                                        umReject();
+                                        throw new Error('未處理的衝突檔案 : ' + unmergeFiles.join(', '));
+                                    } else {
+                                        Console.info(`Commit ${child}`);
+                                        cmd.commit('auto merge');
+                                        umResolve();
+                                    }
+                                });
+                            } else {
+                                umResolve();
+                            }
                         }
                     });
+
 
                     unmergePromise.then(() => {
                         const match = child.match(/^sg(\d+)$/);
@@ -202,15 +201,16 @@ class App {
         /* 30 min 一個區間 */
         const step = 30 * 60 * 1000;
         const ms = Math.floor(new Date().getTime() / step) * step;
-        const dir = moment(ms).format('YYYYMMDD-HHmm');
+        const exportPath = UpdateFilesPath + moment(ms).format('YYYYMMDD-HHmm');
         this.cmd.exportDiff({
             baseSHA,
             newSHA,
             exceStatus: ['D'],
             exceFile: ['^conf', '^.git', '^\.conf', 'config\.php'],
-            outpath: UpdateFilesPath + dir,
+            outpath: exportPath,
             dirname,
         });
+
 
     }
 }

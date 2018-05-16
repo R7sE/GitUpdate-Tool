@@ -1,4 +1,5 @@
 const colors = require('colors/safe');
+const Console = require('./console');
 const node = {
     execSync: require('child_process').execSync,
     path: require('path'),
@@ -163,6 +164,13 @@ class GitCommand {
     }
 
     exportDiff({baseSHA, newSHA, outpath, dirname, exceStatus = null, exceFile = null}) {
+        const dirName = dirname || this.branchName();
+        const outDir = node.path.resolve(outpath, dirName);
+        if (node.fs.existsSync(outDir)) {
+            Console.warning(`${outDir} is already exists.`);
+            return false;
+        }
+
         this.checkout(newSHA, () => {
             let hasExceStatus = Array.isArray(exceStatus);
             let hasExceFile = Array.isArray(exceFile);
@@ -185,12 +193,10 @@ class GitCommand {
                 return console.log(colors.green(`${dirname} > 檔案無差異`));
             }
 
-            let dirName = dirname || this.branchName();
-            let outDir = node.path.resolve(outpath, dirName);
             let outZipFile = node.path.resolve(outDir, dirName) + '.zip';
             this.exec(`mkdir ${outDir}`);
 
-            let result = this.exec(`git archive --format zip -o "${outZipFile}" ${newSHA} ${files.join(' ')}`);
+            this.exec(`git archive --format zip -o "${outZipFile}" ${newSHA} ${files.join(' ')}`);
 
             /* 原先使用 jszip 做 unzip 的時後 binary 檔案會錯誤, 現在改用 7z 來處理,
              * 安裝 http://www.developershome.com/7-zip
