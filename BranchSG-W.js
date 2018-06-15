@@ -1,70 +1,80 @@
 const BranchTree = require('./BranchTree');
 
-
 const btree = new BranchTree('master');
 
-btree.append('master', () => {
-    ([
-        'sg3',
-        'sg30',
-        'sg2',
-        'sg31',
-        'sg12',
-        'sg1',
-        'sg18',
-        'sg42',
-        'sg0',
-        'sg22',
-        'sg11',
-        'sg21',
-        'sg6',
-        'sg40',
-        'sg9',
-        'sg81',
-        'sg19',
-        'sg4',
-        'sg14',
-        'sg32',
-        'sg43',
-        'sg8',
-        'sg25',
-        'sg24',
-        'sg45',
-        'sg39',
-        'sg41',
-        'sg27',
-        'sg37',
-        'sg7',
-        'sg29',
-        'sg51',
-        'sg5',
-        'sg10',
-        'sg13',
-        'sg26',
-        'sg82',
-        'sg34',
-        'sg28',
-        '2018-redis',
-    ]).forEach(name => {
-        btree.add(name);
-    });
-});
+btree.get('master')
+    .add('sg0')
+    .add('sg1')
+    .add('sg2')
+    .add('sg3')
+    .add('sg4')
+    .add('sg5')
+    .add('sg6')
+    .add('sg7')
+    .add('sg8')
+    .add('sg9')
+    .add('sg10')
+    .add('sg11')
+    .add('sg12')
+    .add('sg13')
+    .add('sg14')
+    .add('sg18')
+    .add('sg19')
+    .add('sg21')
+    .add('sg22')
+    .add('sg24')
+    .add('sg25')
+    .add('sg26')
+    .add('sg27')
+    .add('sg28')
+    .add('sg29')
+    .add('sg30')
+    .add('sg31')
+    .add('sg32')
+    .add('sg34')
+    .add('sg37')
+    .add('sg39')
+    .add('sg40')
+    .add('sg41')
+    .add('sg43')
+    .add('sg45')
+    .add('sg51')
+    .add('sg81')
+    .add('sg82')
+    .add('dev')
+    .add('closeCasino')
+    .add('Cross_day')
+    .add('chloe')
+    .add('2018-redis')
+    .add('enableSet')
+    .add('ext_agent')
+    .add('offset');
 
-btree.append('2018-redis', () => {
-    btree.add('2018-redis-cross_day');
-});
+btree.get('offset')
+    .add('sg88');
 
-btree.get('2018-redis-cross_day')
-    .add('sg36')
-    .add('2018-redis-cross_day-newCasino');
-btree.append('2018-redis-cross_day-newCasino', () => {
 
-    btree.add('sg17');
-    btree.add('sg46');
-    btree.add('sg49');
+btree.get('ext_agent')
+    .add('sg81')
+    .add('sg82')
+    .add('sg84');
 
-});
+btree.get('2018-redis')
+    .add('2018-Casino')
+    .add('2018-redis-cross_day');
 
-btree.get('master');
+btree.get('Cross_day')
+    .add('sg15')
+    .add('sg16')
+    .add('sg33')
+    .addGet('2018-redis-cross_day')
+        .add('sg36')
+        .addGet('2018-redis-cross_day-newCasino')
+            .add('sg17')
+            .add('sg35')
+            .add('sg42')
+            .add('sg46')
+            .add('sg47')
+            .add('sg49');
 
 module.exports = btree;

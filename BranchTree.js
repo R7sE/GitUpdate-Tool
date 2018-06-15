@@ -36,6 +36,9 @@ module.exports = class BranchTree {
         if (!(branch in this.tree)) {
             this.tree[branch] = {};
         }
+        if (branch in this.current) {
+            throw new Error(`${branch} is already exists`);
+        }
         this.current[branch] = this.tree[branch];
         return this;
     }

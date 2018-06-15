@@ -3,9 +3,11 @@ const Console = require('./src/console');
 const readline = require('readline');
 const branchC = require('./BranchSG-C');
 const branchW = require('./BranchSG-W');
+// const branchA = require('./BranchSG-A');
+// const branchM = require('./BranchSG-M');
+const branchJavaserver = require('./BranchSG-Javaserver');
 const moment = require('moment');
 const path = require('path');
-const fs = require('fs');
 
 const UpdateFilesPath = path.resolve(__dirname, '../UpdateFiles') + '/';
 
@@ -50,6 +52,7 @@ class App {
         this.branchTree = ({
             c: branchC,
             w: branchW,
+            javaserver: branchJavaserver,
 
         })[type];
         this.SGType = type;
@@ -83,22 +86,30 @@ class App {
                             const unmergeModifys = cmd.unmergeModifys();
                             if (unmergeModifys.length) {
                                 confirm(unmergeModifys, name).then(() => {
-                                    const unmergeFiles = unmergeModifys.filter(fname => {
-                                        if (ChooseThriesMergeFiles.indexOf(fname) >= 0) {
-                                            cmd.chooseThries(fname).added(fname);
-                                            return false;
-                                        }
-                                        return true;
+                                    unmergeModifys.forEach(fname => {
+                                        cmd.chooseThries(fname).added(fname);
                                     });
+                                    Console.info(`Commit ${child}`);
+                                    cmd.commit('auto merge');
+                                    umResolve();
 
-                                    if (unmergeFiles.length) {
-                                        umReject();
-                                        throw new Error('未處理的衝突檔案 : ' + unmergeFiles.join(', '));
-                                    } else {
-                                        Console.info(`Commit ${child}`);
-                                        cmd.commit('auto merge');
-                                        umResolve();
-                                    }
+
+                                    // const unmergeFiles = unmergeModifys.filter(fname => {
+                                    //     if (ChooseThriesMergeFiles.indexOf(fname) >= 0) {
+                                    //         cmd.chooseThries(fname).added(fname);
+                                    //         return false;
+                                    //     }
+                                    //     return true;
+                                    // });
+
+                                    // if (unmergeFiles.length) {
+                                    //     umReject();
+                                    //     throw new Error('未處理的衝突檔案 : ' + unmergeFiles.join(', '));
+                                    // } else {
+                                    //     Console.info(`Commit ${child}`);
+                                    //     cmd.commit('auto merge');
+                                    //     umResolve();
+                                    // }
                                 });
                             } else {
                                 umResolve();
