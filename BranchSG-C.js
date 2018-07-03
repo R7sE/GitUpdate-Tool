@@ -14,7 +14,6 @@ btree.addGet('master')
     .add('sg1')
     .add('sg28')
     .add('sg34')
-    .add('sg10')
     .add('sg12')
     .add('sg6')
     .add('sg19')
@@ -71,6 +70,8 @@ btree.get('root')
                     .add('sg47')
                     .add('sg46')
                     .add('sg49')
+                    .add('sg10')
+                    .add('sg20')
                     .addGet('offset');
                         // .add('sg88');
 
