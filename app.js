@@ -3,7 +3,7 @@ const Console = require('./src/console');
 const readline = require('readline');
 const branchC = require('./BranchSG-C');
 const branchW = require('./BranchSG-W');
-// const branchA = require('./BranchSG-A');
+const branchA = require('./BranchSG-A');
 // const branchM = require('./BranchSG-M');
 const branchJavaserver = require('./BranchSG-Javaserver');
 const moment = require('moment');
@@ -52,6 +52,7 @@ class App {
         this.branchTree = ({
             c: branchC,
             w: branchW,
+            a: branchA,
             javaserver: branchJavaserver,
 
         })[type];
