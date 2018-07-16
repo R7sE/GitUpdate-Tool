@@ -65,6 +65,7 @@ btree.get('Cross_day')
     .addGet('2018-redis-cross_day')
         .add('sg36')
         .addGet('Casino_4in1')
+            .add('sg6')
             .add('sg10')
             .add('sg17')
             .add('sg20')
@@ -73,6 +74,7 @@ btree.get('Cross_day')
             .add('sg42')
             .add('sg46')
             .add('sg47')
-            .add('sg49');
+            .add('sg49')
+            .add('sg88');
 
 module.exports = btree;
