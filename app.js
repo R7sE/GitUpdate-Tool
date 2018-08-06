@@ -4,7 +4,7 @@ const readline = require('readline');
 const branchC = require('./BranchSG-C');
 const branchW = require('./BranchSG-W');
 const branchA = require('./BranchSG-A');
-// const branchM = require('./BranchSG-M');
+const branchM = require('./BranchSG-M');
 const branchJavaserver = require('./BranchSG-Javaserver');
 const moment = require('moment');
 const path = require('path');
@@ -53,6 +53,7 @@ class App {
             c: branchC,
             w: branchW,
             a: branchA,
+            m: branchM,
             javaserver: branchJavaserver,
 
         })[type];
