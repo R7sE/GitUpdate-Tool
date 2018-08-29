@@ -3,9 +3,8 @@ const BranchTree = require('./BranchTree');
 const btree = new BranchTree('master');
 
 btree.get('master')
-    .add('sg0')
-    .add('sg1')
-    .add('sg2')
+    // .add('sg1')
+    // .add('sg2')
     .add('sg3')
     .add('sg4')
     .add('sg5')
@@ -33,8 +32,6 @@ btree.get('master')
     .add('sg43')
     .add('sg45')
     .add('sg51')
-    .add('sg81')
-    .add('sg82')
     .add('dev')
     .add('closeCasino')
     .add('Cross_day')
@@ -46,7 +43,6 @@ btree.get('master')
 
 btree.get('offset')
     .add('sg88');
-
 
 btree.get('ext_agent')
     .add('sg81')
@@ -62,6 +58,9 @@ btree.get('Cross_day')
     .addGet('2018-redis-cross_day')
         .add('sg36')
         .addGet('Casino_4in1')
+            .add('sg0')
+            .add('sg1')
+            .add('sg2')
             .add('sg6')
             .add('sg10')
             .add('sg17')

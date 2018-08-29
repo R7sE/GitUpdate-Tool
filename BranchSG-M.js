@@ -5,8 +5,8 @@ const btree = new BranchTree('root');
 
 btree.addGet('master')
     .add('chloe')
-    .add('sg1')
-    .add('sg2')
+    // .add('sg1')
+    // .add('sg2')
     .add('sg3')
     .add('sg4')
     .add('sg5')
@@ -34,11 +34,11 @@ btree.addGet('master')
     .add('sg45')
     .add('sg51');
 
-btree.get('master')
-    .addGet('ext_agent')
-        .add('sg81')
-        .add('sg82')
-        .add('sg84');
+// btree.get('master')
+//     .addGet('ext_agent')
+//         .add('sg81')
+//         .add('sg82')
+//         .add('sg84');
 
 
 btree.get('root')
@@ -47,8 +47,10 @@ btree.get('root')
         .addGet('2018-redis-cross_day')
             .add('sg36')
             .addGet('Casino_4in1')
-                .add('sg6')
                 .add('sg0')
+                .add('sg1')
+                .add('sg2')
+                .add('sg6')
                 .add('sg10')
                 .add('sg17')
                 .add('sg20')
