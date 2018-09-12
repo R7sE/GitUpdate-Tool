@@ -1,8 +1,8 @@
 const BranchTree = require('./BranchTree');
 
-const btree = new BranchTree('master');
+const btree = new BranchTree('root');
 
-btree.get('master')
+btree.addGet('master')
     // .add('sg1')
     // .add('sg2')
     // .add('sg7')
@@ -34,26 +34,26 @@ btree.get('master')
     .add('sg51')
     .add('dev')
     .add('closeCasino')
-    .add('Cross_day')
     .add('chloe')
-    .add('2018-redis')
-    .add('enableSet')
-    .add('ext_agent')
-    .add('offset');
+    .add('enableSet');
 
-btree.get('offset')
-    .add('sg88');
-
-btree.get('ext_agent')
+btree.get('master')
+    .addGet('ext_agent')
     .add('sg81')
     .add('sg82')
     .add('sg84');
 
-btree.get('2018-redis')
+btree.get('master')
+    .addGet('offset')
+    .add('sg88');
+
+btree.get('master')
+    .addGet('2018-redis')
     .add('2018-Casino')
     .add('2018-redis-cross_day');
 
-btree.get('Cross_day')
+btree.get('root')
+    .addGet('Cross_day')
     .add('sg16')
     .addGet('2018-redis-cross_day')
         .add('sg36')
@@ -76,5 +76,4 @@ btree.get('Cross_day')
             .add('sg47')
             .add('sg49')
             .add('sg88');
-
 module.exports = btree;
