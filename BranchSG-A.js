@@ -69,6 +69,7 @@ btree.get('root')
                 .add('sg46')
                 .add('sg47')
                 .add('sg49')
-                .add('sg88');
+                .add('sg88')
+                .addGet('ext-4in1').add('sg55');
 
 module.exports = btree;
