@@ -37,24 +37,24 @@ btree.addGet('master')
     .add('chloe')
     .add('enableSet');
 
-btree.get('master')
+btree.get('root')
     .addGet('ext_agent')
     .add('sg81')
     .add('sg82')
     .add('sg84');
 
-btree.get('master')
-    .addGet('offset')
-    .add('sg88');
+// btree.get('master')
+//     .addGet('offset')
+//     .add('sg88');
 
-btree.get('master')
-    .addGet('2018-redis')
-    .add('2018-Casino')
-    .add('2018-redis-cross_day');
+// btree.get('master')
+//     .addGet('2018-redis')
+//     .add('2018-Casino')
+//     .add('2018-redis-cross_day');
 
 btree.get('root')
-    .addGet('Cross_day')
-    .add('sg16')
+    // .addGet('Cross_day')
+    // .add('sg16')
     .addGet('2018-redis-cross_day')
         .add('sg36')
         .addGet('Casino_4in1')

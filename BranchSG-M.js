@@ -34,18 +34,16 @@ btree.addGet('master')
     .add('sg45')
     .add('sg51');
 
-// btree.get('master')
-//     .addGet('ext_agent')
-//         .add('sg81')
-//         .add('sg82')
-//         .add('sg84');
+btree.get('root')
+    .addGet('ext_agent')
+        .add('sg81')
+        .add('sg82')
+        .add('sg84');
 
 
 btree.get('root')
-    .addGet('Cross_day')
-        .add('sg16')
-        .addGet('2018-redis-cross_day')
-            .add('sg36')
+        // .addGet('2018-redis-cross_day')
+            // .add('sg36')
             .addGet('Casino_4in1')
                 .add('sg0')
                 .add('sg1')
@@ -64,7 +62,7 @@ btree.get('root')
                 .add('sg46')
                 .add('sg47')
                 .add('sg49')
-                .add('sg88')
-                .addGet('ext-4in1').add('sg55');
+                .add('sg88');
+                // .addGet('ext-4in1').add('sg55');
 
 module.exports = btree;
