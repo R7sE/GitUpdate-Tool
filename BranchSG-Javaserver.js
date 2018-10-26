@@ -62,6 +62,7 @@ btree.get('cross_day')
                 .add('sg46')
                 .add('sg47')
                 .add('sg49')
+                .add('sg84')
                 .add('sg88');
 
 module.exports = btree;
