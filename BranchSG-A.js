@@ -35,41 +35,43 @@ btree.addGet('master')
     .add('sg45')
     .add('sg51');
 
-btree.get('root')
-    .addGet('new_Log')
-        .add('sg84');
+// btree.get('root')
+//     .addGet('new_Log')
+//         .add('sg84');
+
+// btree.get('root')
+    // .addGet('ext_agent')
+        // .add('sg81')
+        // .add('sg82');
+        // .add('sg84');
+
 
 btree.get('root')
-    .addGet('ext_agent')
-        .add('sg81')
-        .add('sg82')
-        .add('sg84');
-
-
-btree.get('root')
-    .addGet('Cross_day')
-        .add('sg16')
-        .addGet('2018-redis-cross_day')
-            .add('sg36')
-            .addGet('Casino_4in1')
-                .add('sg0')
-                .add('sg1')
-                .add('sg2')
-                .add('sg6')
-                .add('sg7')
-                .add('sg10')
-                .add('sg17')
-                .add('sg19')
-                .add('sg20')
-                .add('sg21')
-                .add('sg35')
-                .add('sg39')
-                .add('sg41')
-                .add('sg42')
-                .add('sg46')
-                .add('sg47')
-                .add('sg49')
-                .add('sg88');
-                // .addGet('ext-4in1').add('sg55');
+    .addGet('2018-redis-cross_day')
+        .add('sg36')
+        .addGet('Casino_4in1')
+            .add('sg0')
+            .add('sg1')
+            .add('sg2')
+            .add('sg6')
+            .add('sg7')
+            .add('sg10')
+            .add('sg17')
+            .add('sg19')
+            .add('sg20')
+            .add('sg21')
+            .add('sg35')
+            .add('sg39')
+            .add('sg41')
+            .add('sg42')
+            .add('sg46')
+            .add('sg47')
+            .add('sg49')
+            .add('sg88')
+            .addGet('ext-4in1')
+                .add('sg55')
+                .add('sg81')
+                .add('sg82')
+                .add('sg84');
 
 module.exports = btree;

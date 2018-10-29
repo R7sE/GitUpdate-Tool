@@ -35,20 +35,20 @@ btree.addGet('master')
     .add('sg51')
     .add('dev');
 
-btree.get('master')
-    .add('offset_odds')
-    .addGet('new_Log')
-        .add('sg84');
+// btree.get('master')
+//     .add('offset_odds')
+//     .addGet('new_Log')
+//         .add('sg84');
 
-btree.get('master')
-    .addGet('ext_agent')
-        .add('sg81')
-        .add('sg82')
-        .add('sg84');
+// btree.get('master')
+//     .addGet('ext_agent')
+//         .add('sg81')
+//         .add('sg82');
+//         .add('sg84');
 
 
 btree.get('root')
-    .addGet('Cross_day')
+    // .addGet('Cross_day')
         // .add('sg16')
         .addGet('2018-redis-cross_day')
             .add('sg36')
@@ -70,7 +70,11 @@ btree.get('root')
                 .add('sg46')
                 .add('sg47')
                 .add('sg49')
-                .addGet('ext-4in1').add('sg55');
+                .addGet('ext-4in1')
+                .add('sg55')
+                .add('sg81')
+                .add('sg82')
+                .add('sg84');
                 // .addGet('offset').add('sg88');
 
 module.exports = btree;

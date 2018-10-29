@@ -34,11 +34,9 @@ btree.addGet('master')
     .add('sg45')
     .add('sg51');
 
-btree.get('root')
-    .addGet('ext_agent')
-        .add('sg81')
-        .add('sg82')
-        .add('sg84');
+// btree.get('root')
+//     .addGet('ext_agent')
+//         .add('sg82');
 
 
 btree.get('root')
@@ -62,7 +60,11 @@ btree.get('root')
                 .add('sg46')
                 .add('sg47')
                 .add('sg49')
-                .add('sg88');
-                // .addGet('ext-4in1').add('sg55');
+                .add('sg88')
+                .addGet('ext-4in1')
+                .add('sg55')
+                .add('sg81')
+                .add('sg82')
+                .add('sg84');
 
 module.exports = btree;

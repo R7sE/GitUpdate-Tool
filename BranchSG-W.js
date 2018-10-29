@@ -7,6 +7,7 @@ btree.addGet('master')
     // .add('sg2')
     // .add('sg7')
     // .add('sg19')
+    // .add('sg39')
     .add('sg3')
     .add('sg4')
     .add('sg5')
@@ -27,7 +28,6 @@ btree.addGet('master')
     .add('sg31')
     .add('sg32')
     .add('sg37')
-    // .add('sg39')
     .add('sg40')
     .add('sg43')
     .add('sg45')
@@ -37,11 +37,11 @@ btree.addGet('master')
     .add('chloe')
     .add('enableSet');
 
-btree.get('root')
-    .addGet('ext_agent')
-    .add('sg81')
-    .add('sg82')
-    .add('sg84');
+// btree.get('root')
+//     .addGet('ext_agent')
+//     .add('sg81')
+//     .add('sg82');
+    // .add('sg84');
 
 // btree.get('master')
 //     .addGet('offset')
@@ -75,7 +75,13 @@ btree.get('root')
             .add('sg46')
             .add('sg47')
             .add('sg49')
-            .add('sg88')
             .addGet('ext-4in1')
-                .add('sg55');
+                .add('sg55')
+                .add('sg81')
+                .add('sg82')
+                .add('sg84');
+btree.get('Casino_4in1')
+    .addGet('offset')
+    .add('sg88');
+
 module.exports = btree;
