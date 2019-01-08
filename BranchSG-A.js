@@ -63,6 +63,7 @@ btree.get('root')
             .add('sg19')
             .add('sg20')
             .add('sg21')
+            .add('sg22')
             .add('sg32')
             .add('sg35')
             .add('sg39')
@@ -71,11 +72,13 @@ btree.get('root')
             .add('sg46')
             .add('sg47')
             .add('sg49')
-            .add('sg88')
-            .addGet('ext-4in1')
-                .add('sg55')
-                .add('sg81')
-                .add('sg82')
-                .add('sg84');
+            .add('sg88');
+
+// btree.get('Casino_4in1')
+//     .addGet('ext-4in1')
+//     .add('sg55')
+//     .add('sg81')
+//     .add('sg82')
+//     .add('sg84');
 
 module.exports = btree;
