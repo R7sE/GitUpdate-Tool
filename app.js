@@ -7,6 +7,7 @@ const branchA = require('./BranchSG-A');
 const branchM = require('./BranchSG-M');
 const branchJavaserver = require('./BranchSG-Javaserver');
 const moment = require('moment');
+const _ = require('lodash');
 const path = require('path');
 
 const UpdateFilesPath = path.resolve(__dirname, '../UpdateFiles') + '/';
@@ -46,7 +47,7 @@ class App {
 
     constructor (type) {
 
-        if (!(type in TYPES)) {
+        if (!(type in TYPES) && type !== 'all') {
             throw new Error(`type unknown : ${type}`);
         }
         this.branchTree = ({
@@ -55,14 +56,24 @@ class App {
             a: branchA,
             m: branchM,
             javaserver: branchJavaserver,
-
+            all: null,
         })[type];
         this.SGType = type;
         this.now = new Date();
 
         this.cmd = new GitCommand(TYPES[type]);
+        this.cmds = _.map(TYPES, cwd => new GitCommand(cwd));
     }
-
+    check (name) {
+        const aim = this.SGType;
+        if(aim === 'all') {
+            this.cmds.forEach(cmd => {
+                cmd.checkout(name);
+            });
+        } else {
+            this.cmd.checkout(name);
+        }
+    }
     merge (name) {
 
         const btree = this.branchTree;
@@ -259,11 +270,11 @@ function confirm (files, thries) {
         action: null,
         branch: null,
     };
-    input(`key in sg site : ${Object.keys(TYPES).join(', ')}\n`, site => {
+    input(`key in sg site : ${Object.keys(TYPES).join(', ')}, all\n`, site => {
         inputData.site = site;
     }).then(() => {
 
-        return input('key in action: merge, push, pull, reset \n', action => {
+        return input('key in action: merge, push, pull, reset, checkout \n', action => {
             inputData.action = action;
         });
     }).then(() => {
@@ -284,6 +295,9 @@ function confirm (files, thries) {
                 break;
             case 'reset':
                 app.reset(inputData.branch);
+                break;
+            case 'checkout':
+                app.check(inputData.branch);
                 break;
             default:
                 Console.error(`unknown action ${inputData.action}`);
