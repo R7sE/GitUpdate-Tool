@@ -2,33 +2,32 @@ const BranchTree = require('./BranchTree');
 
 const btree = new BranchTree('root');
 
-btree.addGet('master')
-    .add('sg4')
-    .add('sg27')
-    .add('sg28')
-    .add('sg30')
-    .add('sg31')
-    .add('sg40')
-    .add('sg43')
-    .add('sg45')
-    .add('sg51')
-    .add('closeCasino')
-    .add('dev')
-    .add('cross_day')
-    .add('2018-redis');
+// btree.addGet('master')
+//     .add('sg4')
+//     .add('sg27')
+//     .add('sg28')
+//     .add('sg30')
+//     .add('sg31')
+//     .add('sg40')
+//     .add('sg43')
+//     .add('sg45')
+//     .add('sg51')
+//     .add('closeCasino')
+//     .add('dev')
+//     .add('cross_day')
+//     .add('2018-redis');
 
 
 
 
 btree.get('root')
-    .addGet('Casino_4in1')
+    .addGet('master')
         //Redis:70
         .add('sg13')
         .add('sg18')
         .add('sg24')
         .add('sg29')
         .add('sg30')
-        .add('sg36')
         .add('sg37')
         // .add('sg44')
         .add('sg46')
@@ -45,6 +44,8 @@ btree.get('root')
         .add('sg12')
         .add('sg21')
         .add('sg42')
+        .add('sg45')
+        .add('sg52')
         //Redis:73
         .add('sg0')
         .add('sg1')
@@ -63,6 +64,9 @@ btree.get('root')
         .add('sg32')
         //Redis:75
         .add('sg6')
+        .add('sg31')
+        .add('sg40')
+        .add('sg43')
         .add('sg49')
         .add('sg55')
         .add('sg81')
